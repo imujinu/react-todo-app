@@ -1,24 +1,27 @@
-const initialState = {
+import { Action, InitialState, Todo } from "types/interface";
+
+const initialState: InitialState = {
   list: [],
 };
 
 const count = initialState.list.length; //3
-initialState["nextID"] = count;
+initialState.nextID = count;
 
 // action type에 대한 상수 설정
 const CREATE = "todo/CREATE";
 const DONE = "todo/DONE";
 const INIT = "todo/INIT";
+const DELETE = "todo/DELETE";
 
 // components 에서 사용될 액션 반환 함수
-export function create(payload) {
+export function create(payload: Todo) {
   return {
     type: CREATE,
     payload: payload, // {id:number, text:String}
   };
 }
 
-export function done(id) {
+export function done(id: number) {
   return {
     type: DONE,
     id: id, // id:number
@@ -26,14 +29,17 @@ export function done(id) {
 }
 
 // data:{id, text, done}[]
-export function init(data) {
+export function init(data: Todo[]) {
   return {
     type: INIT,
     data: data,
   };
 }
 
-export function todoReducer(state = initialState, action) {
+export function todoReducer(
+  state = initialState,
+  action: Action
+): InitialState {
   switch (action.type) {
     case INIT:
       return {
@@ -42,10 +48,10 @@ export function todoReducer(state = initialState, action) {
         nextID:
           action.data.length === 0
             ? 1
-            : action.data[action.data.length - 1].id + 1,
+            : action.data[action.data.length - 1]?.id ? + 1,
       };
     case CREATE:
-      if (action.payload.text.trim() === "") return state;
+      if (action.payload?.text?.trim() === "") return state;
       console.log("CREATE 호출됨", action);
       return {
         ...state,
@@ -54,7 +60,7 @@ export function todoReducer(state = initialState, action) {
           text: action.payload.text,
           done: false,
         }),
-        nextID: action.payload.id + 1,
+        nextID: action.payload?.id? + 1
       };
     case DONE:
       console.log("DONE 호출됨", action);

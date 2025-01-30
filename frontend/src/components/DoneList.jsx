@@ -12,7 +12,13 @@ export default function DoneList() {
       <h3>완료 목록</h3>
       <ul>
         {doneList.map((el) => {
-          return <li key={el.id}>{el.text}</li>;
+          return (
+            <li key={el.id}>
+              {el.text}
+              <button>X</button>
+              <button>수정하기</button>
+            </li>
+          );
         })}
       </ul>
     </section>
